@@ -26,7 +26,25 @@ onMounted(() => {
   viewer.axes.setAxes();
   viewer.grid.setGrid();
 
-  window.ondblclick = () => viewer.IFC.selector.pickIfcItem(true);
+  window.ondblclick = async () => {
+    const item = await viewer.IFC.selector.pickIfcItem(true)
+
+    if (!item) {
+      return
+    }
+
+    const result = await viewer.IFC.getProperties(item.modelID, item.id, false, true);
+
+    console.log({item, result})
+
+    const coords = result["ObjectPlacement"]["RelativePlacement"]["Location"]["Coordinates"]
+
+    const x = coords[0].value
+    const y = coords[1].value
+    const z = coords[2].value
+
+    console.log({x, y, z})
+  };
   window.onmousemove = () => viewer.IFC.selector.prePickIfcItem();
   viewer.clipper.active = true;
 
@@ -45,12 +63,6 @@ onMounted(() => {
 
   // viewer.context.renderer.renderer.shadowMap.enabled = true;
   // viewer.context.renderer.renderer.shadowMap.type = PCFSoftShadowMap; // default THREE.PCFShadowMap
-
-  // Assuming 'viewer.IFC' gives you access to the IFC items in the scene:
-  // viewer.IFC.loader.ifcManager.itme.items.forEach(item => {
-  //   item.castShadow = true;
-  //   item.receiveShadow = true;
-  // });
 })
 
 const changed = (changed: Event) => {
