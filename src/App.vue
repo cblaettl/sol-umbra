@@ -224,7 +224,8 @@ const getUvMessage = function() {
     <nav>
       <POIAutocomplete @selectPoi="onPOISelected" />
       <div class="controls">
-        <button :class="{  'nav-btn nav-btn--primary' : shadowEnabled, 'nav-btn' : !shadowEnabled }" @click="toggleShadow">Toggle shadow {{ shadowEnabled ? 'off' : 'on' }}</button>
+        <label class="navlabel">Toggle shadow</label>
+        <button :class="{  'toggleswitch toggleswitch--active' : shadowEnabled, 'toggleswitch' : !shadowEnabled }" @click="toggleShadow"></button>
       </div>
 
       <div class="rad">{{getUvMessage()}}</div>
@@ -267,11 +268,6 @@ nav {
   overflow: hidden;
 }
 
-.controls {
-  display: flex;
-  gap: 1rem;
-}
-
 .nav-btn {
   cursor: pointer;
   background: #d9d7e6;
@@ -289,8 +285,8 @@ nav {
 }
 
 .rad {
-  color: #B2B1B9;
-  margin-top: 5px;
+  color: white;
+  margin-top: 15px;
 }
 
 .loader {
@@ -306,6 +302,44 @@ nav {
   text-transform: uppercase;
   font-weight: bolder;
   text-align: center;
+}
+
+.toggleswitch {
+  border: none;
+  box-shadow: none;
+  outline: none;
+
+  position: relative;
+  width: 3.5em;
+  height: 2em;
+  cursor: pointer;
+  border-radius: 2em;
+  transition: background-color 0.15s ease-in-out;
+}
+
+.toggleswitch::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: calc(2em - 6px);
+  height: calc(2em - 6px);
+  border-radius: 50%;
+  background-color: rgb(44, 46, 67);
+  transition: left 0.15s ease-in-out;
+}
+
+.toggleswitch--active {
+  background-color: #FFD523;
+}
+.toggleswitch--active::before {
+  left: calc(100% - (2em - 6px) - 3px);
+}
+
+.navlabel {
+  margin: 15px 0 5px;
+  color: white;
+  display: block;
 }
 
 </style>

@@ -35,6 +35,7 @@ const onSelect = (result) => {
 </script>
 
 <template>
+  <label class="navlabel">Place / Address</label>
   <vue3-simple-typeahead
       id="typeahead_id"
       :items="pois.list"
