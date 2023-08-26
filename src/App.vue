@@ -2,9 +2,7 @@
 import { onMounted, ref } from "vue";
 import { IfcViewerAPI } from "web-ifc-viewer";
 import { BoxGeometry, Color, Mesh, MeshPhongMaterial, PCFSoftShadowMap, Vector2, Vector3 } from "three";
-import { Color } from "three";
 import { getUV } from "./services/weather";
-import { IfcManager } from "web-ifc-viewer/dist/components";
 
 const container = ref<HTMLDivElement | null>(null);
 
@@ -111,7 +109,6 @@ const goTo = () => {
 
 <template>
   <input @change="changed" type="file" />
-  <button @click="goTo">Go to place</button>
-  <div>{{ uv }}</div>
+  <div>{{ uv }} W/m²</div>
   <div ref="container" style="width: 100%; height: 90vh;"></div>
 </template>
