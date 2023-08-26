@@ -187,7 +187,7 @@ const setDate = (event: any) => {
         end-angle="180"
         line-cap="round"
         radius="100"
-        rangeColor="#FFDF22"
+        rangeColor="#FFD523"
         handleShape="dot"
         :tooltipFormat="format"
         :change="setTime"
@@ -200,11 +200,11 @@ const setDate = (event: any) => {
     <nav>
       <POIAutocomplete @selectPoi="onPOISelected" />
       <div class="controls">
-        <button @click="goTo">Go to place</button>
-        <button @click="toggleShadow">Toggle shadow {{ shadowEnabled ? 'off' : 'on' }}</button>
+        <button class="nav-btn" @click="goTo">Go to place</button>
+        <button class="nav-btn" @click="toggleShadow">Toggle shadow {{ shadowEnabled ? 'off' : 'on' }}</button>
       </div>
 
-      <div>{{ uv }} W/m²</div>
+      <div class="rad">{{ uv }} W/m²</div>
     </nav>
   </div>
 </template>
@@ -222,8 +222,8 @@ nav {
 
   position: absolute;
   top: 0;
-  background: rgb(24, 24, 24);
-  box-shadow: rgba(100, 100, 111, 0.4) 0px 7px 29px 0px;
+  background: rgb(44, 46, 67);
+  box-shadow: rgba(89, 82, 96, 0.4) 0px 7px 29px 0px;
   width: calc(100% - 2rem);
 }
 
@@ -246,5 +246,28 @@ nav {
 .controls {
   display: flex;
   gap: 1rem;
+}
+
+.nav-btn {
+  background: #B2B1B9;
+  border: 1px solid #FFD523;
+  border-radius: 5px 5px 5px 5px;
+  padding: 10px;
+  font-size: medium;
+}
+
+.rad {
+  color: #B2B1B9;
+  margin-top: 5px;
+}
+
+.simple-typeahead {
+  color: #2C2E43;
+  background: #B2B1B9;
+  font-size: medium;
+  padding: 7px;
+}
+.simple-typeahead:hover, .simple-typeahead:active {
+  border: 1px solid #FFD523;
 }
 </style>
