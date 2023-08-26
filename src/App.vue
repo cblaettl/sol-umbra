@@ -2,24 +2,17 @@
 import { onMounted, ref } from "vue";
 import { IfcViewerAPI } from "web-ifc-viewer";
 import RoundSlider from "vue-three-round-slider";
-import { BoxGeometry, Color, Mesh, MeshPhongMaterial, PCFSoftShadowMap, Vector2, Vector3 } from "three";
+import { Color, PCFSoftShadowMap, Vector2, Vector3 } from "three";
 import { getUV } from "./services/weather";
 import { SunLight } from "./sun";
 import POIAutocomplete from "./component/POIAutocomplete.vue";
+import { createBox } from "./utils";
+
+const IFC_MODEL_URL = "/3D_Stadtmodell.ifc"
 
 const container = ref<HTMLDivElement | null>(null);
 
-
 let viewer: IfcViewerAPI
-
-const createBox = (width: number, height: number, depth: number, color = 0xffffff) => {
-	var geometry = new BoxGeometry( width, height, depth );
-	var material = new MeshPhongMaterial( { color: color } );
-	var cube = new Mesh(geometry, material);
-	cube.castShadow = true;
-	cube.receiveShadow = true;
-	return cube;
-}
 
 const sun = new SunLight(
   // Bern
@@ -29,6 +22,9 @@ const sun = new SunLight(
   new Vector3( -1.0, 0.0, 0.0 ),
   new Vector3( 0.0, -1.0, 0.0 )
 );
+
+const shadowEnabled = ref(false)
+
 const date = new Date();
 const uv = ref(0)
 
@@ -36,8 +32,6 @@ onMounted(async () => {
   if (!container.value) {
     return
   }
-
-  uv.value = await getUV()
 
   viewer = new IfcViewerAPI({
     container: container.value,
@@ -50,10 +44,16 @@ onMounted(async () => {
     COORDINATE_TO_ORIGIN: true
   });
 
-  // viewer.axes.setAxes();
-  // viewer.grid.setGrid();
+  await viewer.IFC.loadIfcUrl(IFC_MODEL_URL);
 
-  viewer.context.renderer.renderer.shadowMap.enabled = true;
+  // viewer.context.renderer.renderer.shadowMap.enabled = true;
+  viewer.context.scene.scene.castShadow = true
+  viewer.context.scene.scene.children.forEach(c => {
+    if (c.type === "Mesh") {
+      c.castShadow = true
+      c.receiveShadow = true
+    }
+  })
 
   window.ondblclick = async () => {
     const item = await viewer.IFC.selector.pickIfcItem(true)
@@ -89,42 +89,26 @@ onMounted(async () => {
   // sun.shadow.mapSize.height = 51200; // default is 512
   // sun.shadow.camera.near = 0.5; // default is 0.5
   // sun.shadow.camera.far = 50000; // default is 500
+
+  uv.value = await getUV()
 })
 
-const changed = async (changed: Event) => {
-  if (!changed.target) {
-    return
+const toggleShadow = () => {
+  if (shadowEnabled.value) {
+    viewer.context.scene.remove(sun)
+  } else {
+    viewer.context.scene.add(sun)
+
+    sun.directionalLight.shadow.camera.right = 300.0;
+    sun.directionalLight.shadow.camera.left = -30.0;
+    sun.directionalLight.shadow.camera.top = 30.0;
+    sun.directionalLight.shadow.camera.bottom = -30.0;
+
+    sun.updateOrientation(date);
+    sun.updateDirectionalLight();
   }
 
-  const input = changed.target as HTMLInputElement;
-
-  if (!input.files || !input.files.length) {
-    return
-  }
-
-  const file = input.files[0];
-
-  const ifcURL = URL.createObjectURL(file);
-
-  await viewer.IFC.loadIfcUrl(ifcURL);
-
-  viewer.context.scene.scene.castShadow = true
-  viewer.context.scene.scene.children.forEach(c => {
-    if (c.type === "Mesh") {
-      c.castShadow = true
-      c.receiveShadow = true
-    }
-  })
-
-  viewer.context.scene.add(sun)
-
-	sun.directionalLight.shadow.camera.right = 300.0;
-	sun.directionalLight.shadow.camera.left = -30.0;
-	sun.directionalLight.shadow.camera.top = 30.0;
-	sun.directionalLight.shadow.camera.bottom = -30.0;
-
-	sun.updateOrientation(date);
-	sun.updateDirectionalLight();
+  shadowEnabled.value = !shadowEnabled.value
 }
 
 const goTo = () => {
@@ -184,9 +168,12 @@ const setTime = (event: { value: number }) => {
     </div>
 
     <nav>
-      <input @change="changed" type="file" />
       <POIAutocomplete @selectPoi="onPOISelected" />
-      <button @click="goTo">Go to place</button>
+      <div class="controls">
+        <button @click="goTo">Go to place</button>
+        <button @click="toggleShadow">Toggle shadow {{ shadowEnabled ? 'off' : 'on' }}</button>
+
+      </div>
       <div>{{ uv }} W/m²</div>
     </nav>
   </div>
@@ -223,5 +210,10 @@ nav {
   height: 100%;
   width: 100%;
   position: absolute;
+}
+
+.controls {
+  display: flex;
+  gap: 1rem;
 }
 </style>
