@@ -20,9 +20,8 @@ const loading = ref(true)
 const sun = new SunLight(
   // Bern
   new Vector2( 46.9480, 7.4474 ),
-  // TODO: Find north
-  new Vector3( 0.0, 0.0, 1.0 ),
-  new Vector3( -1.0, 0.0, 0.0 ),
+  new Vector3( 0.0, 0.0, -1.0 ),
+  new Vector3( 1.0, 0.0, 0.0 ),
   new Vector3( 0.0, -1.0, 0.0 )
 );
 
@@ -55,13 +54,8 @@ onMounted(async () => {
 
   await viewer.IFC.loadIfcUrl(IFC_MODEL_URL);
 
-	const northIndicator = createBox( 2.0, 2.0, 8.0, 0xff0000 );
-	northIndicator.position.set( 0.0, 1.0, 20.0 );
-	viewer.context.scene.add( northIndicator );
-
   viewer.context.scene.scene.children.forEach(c => {
     if (c.type === "Mesh") {
-      c.rotateOnAxis(new Vector3(0, 1, 0), Math.PI)
       c.castShadow = true
       c.receiveShadow = true
     }
@@ -182,6 +176,8 @@ const setTime = (event: { value: number }) => {
         :tooltipFormat="format"
         :change="setTime"
       />
+
+      <input type="date" />
     </div>
 
     <nav>
@@ -220,7 +216,8 @@ nav {
   bottom: 0;
 
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .container {
