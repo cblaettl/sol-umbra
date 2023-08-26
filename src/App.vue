@@ -6,7 +6,7 @@ import { Color, PCFSoftShadowMap, ReinhardToneMapping, Vector2, Vector3 } from "
 import { getUV } from "./services/weather";
 import { SunLight } from "./sun";
 import POIAutocomplete from "./component/POIAutocomplete.vue";
-import { createBox, latLngToCartesian } from "./utils";
+import { drawMarker, latLngToCartesian } from "./utils";
 
 const IFC_MODEL_URL = "/3D_Stadtmodell.ifc"
 
@@ -126,11 +126,6 @@ console.table(coordinates);  // Should approximately give {x: 53, y: 0, z: 52}
 
 
 const goTo = (x: number, y: number) => {
-  // Cube in the middle
-  const cube = createBox(1.0, 1.0, 1.0, 0xff0000);
-  cube.position.set(x, 5.0, y);
-  viewer.context.scene.add(cube);
-
   viewer.context.ifcCamera.cameraControls.setLookAt(x + 50, 50, y + 50, x, 5, y, true)
 }
 
@@ -149,6 +144,8 @@ const onPOISelected = (coordinates: { lat: number, long: number }) => {
   const converted = latLngToCartesian(coordinates.long, coordinates.lat)
 
   goTo(converted.x, converted.y)
+
+  drawMarker(viewer.context.scene.scene, converted.x, converted.y)
 }
 
 const setTime = (event: { value: number }) => {
@@ -210,7 +207,6 @@ const setDate = (event: any) => {
     <nav>
       <POIAutocomplete @selectPoi="onPOISelected" />
       <div class="controls">
-        <button @click="goTo">Go to place</button>
         <button @click="toggleShadow">Toggle shadow {{ shadowEnabled ? 'off' : 'on' }}</button>
       </div>
 
