@@ -106,8 +106,8 @@ const toggleShadow = () => {
     sun.directionalLight.shadow.camera.bottom = -500;
     sun.directionalLight.shadow.camera.near = -500;
 
-    sun.directionalLight.shadow.mapSize.width = 1024 * 20; // Double the default width
-    sun.directionalLight.shadow.mapSize.height = 1024 * 20; // Double the default height
+    sun.directionalLight.shadow.mapSize.width = 1024 * 1; // Double the default width
+    sun.directionalLight.shadow.mapSize.height = 1024 * 1; // Double the default height
 
     sun.directionalLight.shadow.bias = -0.0010; // Experiment with this value
 
@@ -153,6 +153,21 @@ const setTime = (event: { value: number }) => {
 	sun.updateOrientation(date);
 	sun.updateDirectionalLight();
 }
+
+const setDate = (event: any) => {
+  const newDate = new Date(event.target.value);
+  let minutes = date.getMinutes();
+  let hours = date.getHours();
+
+  date.setFullYear(newDate.getFullYear(), newDate.getMonth(), newDate.getDate());
+  date.setMinutes(minutes);
+  date.setHours(hours);
+
+  console.log(date);
+
+	sun.updateOrientation(date);
+	sun.updateDirectionalLight();
+}
 </script>
 
 <template>
@@ -179,7 +194,8 @@ const setTime = (event: { value: number }) => {
         :change="setTime"
       />
 
-      <input type="date" />
+      <input type="date" 
+        @change="setDate"/>
     </div>
 
     <nav>
