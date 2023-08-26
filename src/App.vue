@@ -241,13 +241,13 @@ const getUvMessage = function() {
 
 nav {
   padding: 1rem;
-  border-radius: 0 0 10px 10px;
 
   position: absolute;
   top: 0;
   background: rgb(44, 46, 67);
   box-shadow: rgba(89, 82, 96, 0.4) 0px 7px 29px 0px;
-  width: calc(100% - 2rem);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .slider {
@@ -264,6 +264,7 @@ nav {
   height: 100%;
   width: 100%;
   position: absolute;
+  overflow: hidden;
 }
 
 .controls {
@@ -272,11 +273,18 @@ nav {
 }
 
 .nav-btn {
+  cursor: pointer;
   background: #B2B1B9;
-  border: 1px solid #FFD523;
-  border-radius: 5px 5px 5px 5px;
+  border: 1px solid #B2B1B9;
+  border-radius: 0;
   padding: 10px;
   font-size: medium;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.nav-btn--primary {
+  border-color: #FFD523; 
+  background-color: #FFD523; 
 }
 
 .rad {
@@ -284,15 +292,6 @@ nav {
   margin-top: 5px;
 }
 
-.simple-typeahead {
-  color: #2C2E43;
-  background: #B2B1B9;
-  font-size: medium;
-  padding: 7px;
-}
-.simple-typeahead:hover, .simple-typeahead:active {
-  border: 1px solid #FFD523;
-}
 .loader {
   height: 100%;
   width: 100%;

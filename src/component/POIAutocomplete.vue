@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {reactive} from "vue";
-
+import { ref } from "vue";
 const emit = defineEmits(['selectPoi']);
 
 const pois = reactive({list: []});
@@ -46,38 +46,49 @@ const onSelect = (result) => {
 </template>
 
 <style>
+
 .simple-typeahead {
   font-size: 16px;
-  display: inline-block;
-  width: calc(100% - 32px) !important;
-  border-radius: 3px;
+  border-radius: 0;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0;
+  border-radius: 0;
   margin: 10px 0;
-  padding: 4px 15px 4px 15px;
+  padding: 0;
   position: relative;
   background: transparent;
-  border: 1px solid #ddd;
   -webkit-transition: all 200ms ease-in-out;
   -moz-transition: all 200ms ease-in-out;
   transition: all 200ms ease-in-out;
-}
-
-.simple-typeahead:hover, .simple-typeahead:active {
-  border: 1px solid blueviolet;
+  color: #2C2E43;
+  background: white;
 }
 
 .simple-typeahead input[type=text] {
-  font-size: 16px;
+  color: inherit;
+  background: inherit;
+  border: 2px solid white;
+  font-size: inherit;
   width: 100%;
-  border: none;
+  box-sizing: border-box;
   box-shadow: none;
   display: inline-block;
-  padding: 0;
-  background: transparent;
+  padding: 0.5em 1em;
 }
 
-.simple-typeahead input[type=text]:hover, .simple-typeahead input[type=text]:focus, .simple-typeahead input[type=text]:focus-visible, .simple-typeahead input[type=text]:active {
+.simple-typeahead:hover input[type=text],
+.simple-typeahead:active input[type=text],
+.simple-typeahead:focus input[type=text] {
+  border-color: #FFD523;
+}
+
+.simple-typeahead input[type=text]:hover,
+.simple-typeahead input[type=text]:focus,
+.simple-typeahead input[type=text]:focus-visible, .simple-typeahead input[type=text]:active {
   box-shadow: none;
   outline: none;
 }
+
 
 </style>
