@@ -41,8 +41,8 @@ onMounted(async () => {
     backgroundColor: new Color(0xffffff),
   });
 
-  viewer.axes.setAxes();
-  viewer.grid.setGrid();
+  // viewer.axes.setAxes();
+  // viewer.grid.setGrid();
 
   viewer.IFC.setWasmPath("node_modules/web-ifc/")
   viewer.IFC.loader.ifcManager.applyWebIfcConfig({
