@@ -2,7 +2,7 @@
 import { onMounted, ref } from "vue";
 import { IfcViewerAPI } from "web-ifc-viewer";
 import RoundSlider from "vue-three-round-slider";
-import { Color, PCFSoftShadowMap, Vector2, Vector3 } from "three";
+import { Color, PCFSoftShadowMap, ReinhardToneMapping, Vector2, Vector3 } from "three";
 import { getUV } from "./services/weather";
 import { SunLight } from "./sun";
 import POIAutocomplete from "./component/POIAutocomplete.vue";
@@ -51,6 +51,7 @@ onMounted(async () => {
 
   viewer.context.renderer.renderer.shadowMap.enabled = true;
   viewer.context.renderer.renderer.shadowMap.type = PCFSoftShadowMap;
+  viewer.context.renderer.renderer.toneMapping = ReinhardToneMapping;
 
   await viewer.IFC.loadIfcUrl(IFC_MODEL_URL);
 
