@@ -168,6 +168,23 @@ const setDate = (event: any) => {
 	sun.updateOrientation(date);
 	sun.updateDirectionalLight();
 }
+
+const getUvMessage = function() {
+  let message = "";
+  if (uv.value <= 40) {
+    message = "It is currently dark outside";
+  } else if (40 < uv.value && uv.value <= 120) {
+    message = "You can leave your sunglasses at home";
+  } else if (120 < uv.value && uv.value <= 250) {
+    message = "Quite sunny innit";
+  } else if (250 < uv.value && uv.value <= 500) {
+    message = "Bring sunscreen with you";
+  } else if (uv.value > 500) {
+    message = "You'll be roasted outside";
+  }
+
+  return message + " (" + uv.value + " W/m²)";
+}
 </script>
 
 <template>
@@ -205,7 +222,7 @@ const setDate = (event: any) => {
         <button class="nav-btn" @click="toggleShadow">Toggle shadow {{ shadowEnabled ? 'off' : 'on' }}</button>
       </div>
 
-      <div class="rad">{{ uv }} W/m²</div>
+      <div class="rad">{{getUvMessage()}}</div>
     </nav>
   </div>
 </template>
