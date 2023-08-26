@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { IfcViewerAPI } from "web-ifc-viewer";
+import RoundSlider from "vue-three-round-slider";
 import { BoxGeometry, Color, Mesh, MeshPhongMaterial, PCFSoftShadowMap, Vector2, Vector3 } from "three";
 import { getUV } from "./services/weather";
 
 const container = ref<HTMLDivElement | null>(null);
+
 
 let viewer: IfcViewerAPI
 
@@ -105,10 +107,28 @@ const goTo = () => {
 
   viewer.context.ifcCamera.cameraControls.setLookAt(50, 50, 50, 0, 5, 0, true)
 }
+
+const format = (event: any) => {
+  var minutes = +event.value;
+  var hours = Math.floor(minutes / 60);
+  minutes = minutes % 60;
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+}
 </script>
 
 <template>
+  <round-slider
+    min="360"
+    max="1260"
+    end-angle="180"
+    line-cap="round"
+    radius="100"
+    rangeColor="#FFDF22"
+    handleShape="dot"
+    :tooltipFormat="format"
+  />
   <input @change="changed" type="file" />
+  <button @click="goTo">Go to place</button>
   <div>{{ uv }} W/m²</div>
   <div ref="container" style="width: 100%; height: 90vh;"></div>
 </template>
