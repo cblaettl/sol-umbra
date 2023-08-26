@@ -6,7 +6,7 @@ import { Color, PCFSoftShadowMap, ReinhardToneMapping, Vector2, Vector3 } from "
 import { getUV } from "./services/weather";
 import { SunLight } from "./sun";
 import POIAutocomplete from "./component/POIAutocomplete.vue";
-import { createBox } from "./utils";
+import { createBox, latLngToCartesian } from "./utils";
 
 const IFC_MODEL_URL = "/3D_Stadtmodell.ifc"
 
@@ -120,13 +120,18 @@ const toggleShadow = () => {
   shadowEnabled.value = !shadowEnabled.value
 }
 
-const goTo = () => {
+// Example usage
+const coordinates = latLngToCartesian(7.440787, 46.941367);
+console.table(coordinates);  // Should approximately give {x: 53, y: 0, z: 52}
+
+
+const goTo = (x: number, y: number) => {
   // Cube in the middle
-  const cube = createBox(5.0, 5.0, 5.0, 0xff0000);
-  cube.position.set(0.0, 5.0, 0.0);
+  const cube = createBox(1.0, 1.0, 1.0, 0xff0000);
+  cube.position.set(x, 5.0, y);
   viewer.context.scene.add(cube);
 
-  viewer.context.ifcCamera.cameraControls.setLookAt(50, 50, 50, 0, 5, 0, true)
+  viewer.context.ifcCamera.cameraControls.setLookAt(x + 50, 50, y + 50, x, 5, y, true)
 }
 
 const format = (event: { value: number }) => {
@@ -136,10 +141,14 @@ const format = (event: { value: number }) => {
   return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
 }
 
-const onPOISelected = (coordinates: any) => {
+const onPOISelected = (coordinates: { lat: number, long: number }) => {
   // todo move camera to position
   console.log("coordiantes:");
   console.table(coordinates);
+
+  const converted = latLngToCartesian(coordinates.long, coordinates.lat)
+
+  goTo(converted.x, converted.y)
 }
 
 const setTime = (event: { value: number }) => {
@@ -194,7 +203,7 @@ const setDate = (event: any) => {
         :change="setTime"
       />
 
-      <input type="date" 
+      <input type="date"
         @change="setDate"/>
     </div>
 
