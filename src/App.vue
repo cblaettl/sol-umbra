@@ -165,20 +165,63 @@ const setTime = (event: { value: number }) => {
 </script>
 
 <template>
-  <round-slider
-    min="360"
-    max="1260"
-    end-angle="180"
-    line-cap="round"
-    radius="100"
-    rangeColor="#FFDF22"
-    handleShape="dot"
-    :tooltipFormat="format"
-    :change="setTime"
-  />
-  <input @change="changed" type="file" />
-  <POIAutocomplete @selectPoi="onPOISelected" />
-  <button @click="goTo">Go to place</button>
-  <div>{{ uv }} W/m²</div>
-  <div ref="container" style="width: 100%; height: 90vh;"></div>
+
+  <div class="wrapper">
+    <div ref="container" class="container"></div>
+
+    <div class="slider">
+      <round-slider
+        min="360"
+        max="1260"
+        end-angle="180"
+        line-cap="round"
+        radius="100"
+        rangeColor="#FFDF22"
+        handleShape="dot"
+        :tooltipFormat="format"
+        :change="setTime"
+      />
+    </div>
+
+    <nav>
+      <input @change="changed" type="file" />
+      <POIAutocomplete @selectPoi="onPOISelected" />
+      <button @click="goTo">Go to place</button>
+      <div>{{ uv }} W/m²</div>
+    </nav>
+  </div>
 </template>
+
+<style scoped>
+.wrapper {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+nav {
+  padding: 1rem;
+  border-radius: 0 0 10px 10px;
+
+  position: absolute;
+  top: 0;
+  background: rgb(24, 24, 24);
+  box-shadow: rgba(100, 100, 111, 0.4) 0px 7px 29px 0px;
+  width: calc(100% - 2rem);
+}
+
+.slider {
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
+</style>
