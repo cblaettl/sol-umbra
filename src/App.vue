@@ -91,10 +91,18 @@ const changed = (changed: Event) => {
 
     viewer.IFC.loadIfcUrl(ifcURL);
   }
+const goTo = () => {
+  // Cube in the middle
+  const cube = createBox( 5.0, 5.0, 5.0, 0xff0000 );
+  cube.position.set( 0.0, 5.0, 0.0 );
+  viewer.context.scene.add( cube );
 
+  viewer.context.ifcCamera.cameraControls.setLookAt(50, 50, 50, 0, 5, 0, true)
+}
 </script>
 
 <template>
   <input @change="changed" type="file" />
+  <button @click="goTo">Go to place</button>
   <div ref="container" style="width: 100%; height: 90vh;"></div>
 </template>
