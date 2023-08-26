@@ -14,6 +14,7 @@ const container = ref<HTMLDivElement | null>(null);
 
 let viewer: IfcViewerAPI
 
+// const boundingBox = new Box3();
 const sun = new SunLight(
   // Bern
   new Vector2( 46.9480, 7.4474 ),
@@ -44,10 +45,10 @@ onMounted(async () => {
     COORDINATE_TO_ORIGIN: true
   });
 
-  await viewer.IFC.loadIfcUrl(IFC_MODEL_URL);
+  const model = await viewer.IFC.loadIfcUrl(IFC_MODEL_URL);
 
-  // viewer.context.renderer.renderer.shadowMap.enabled = true;
-  viewer.context.scene.scene.castShadow = true
+  console.log(model)
+
   viewer.context.scene.scene.children.forEach(c => {
     if (c.type === "Mesh") {
       c.castShadow = true
@@ -79,16 +80,10 @@ onMounted(async () => {
 
     console.log({x, y, z})
   };
-  // window.onmousemove = () => viewer.IFC.selector.prePickIfcItem();
   viewer.clipper.active = true;
 
   viewer.context.renderer.renderer.shadowMap.enabled = true;
   viewer.context.renderer.renderer.shadowMap.type = PCFSoftShadowMap; // default THREE.PCFShadowMap
-
-  // sun.shadow.mapSize.width = 51200; // default is 512
-  // sun.shadow.mapSize.height = 51200; // default is 512
-  // sun.shadow.camera.near = 0.5; // default is 0.5
-  // sun.shadow.camera.far = 50000; // default is 500
 
   uv.value = await getUV()
 })
@@ -99,10 +94,13 @@ const toggleShadow = () => {
   } else {
     viewer.context.scene.add(sun)
 
-    sun.directionalLight.shadow.camera.right = 300.0;
-    sun.directionalLight.shadow.camera.left = -30.0;
-    sun.directionalLight.shadow.camera.top = 30.0;
-    sun.directionalLight.shadow.camera.bottom = -30.0;
+    sun.directionalLight.shadow.camera.left = -500;
+    sun.directionalLight.shadow.camera.right = 500;
+    sun.directionalLight.shadow.camera.top = 500;
+    sun.directionalLight.shadow.camera.bottom = -500;
+    sun.directionalLight.shadow.camera.near = -500;
+
+    sun.directionalLight.shadow.camera.updateProjectionMatrix();
 
     sun.updateOrientation(date);
     sun.updateDirectionalLight();
