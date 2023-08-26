@@ -14,6 +14,8 @@ const container = ref<HTMLDivElement | null>(null);
 
 let viewer: IfcViewerAPI
 
+const loading = ref(true)
+
 // const boundingBox = new Box3();
 const sun = new SunLight(
   // Bern
@@ -39,6 +41,9 @@ onMounted(async () => {
     backgroundColor: new Color(0xffffff),
   });
 
+  viewer.axes.setAxes();
+  viewer.grid.setGrid();
+
   viewer.IFC.setWasmPath("node_modules/web-ifc/")
   viewer.IFC.loader.ifcManager.applyWebIfcConfig({
     USE_FAST_BOOLS: true,
@@ -47,14 +52,22 @@ onMounted(async () => {
 
   const model = await viewer.IFC.loadIfcUrl(IFC_MODEL_URL);
 
+	const northIndicator = createBox( 2.0, 2.0, 8.0, 0xff0000 );
+	northIndicator.position.set( 0.0, 1.0, 20.0 );
+	viewer.context.scene.add( northIndicator );
+
   console.log(model)
 
   viewer.context.scene.scene.children.forEach(c => {
     if (c.type === "Mesh") {
+      console.log(c)
+      c.rotateOnAxis(new Vector3(0, 1, 0), Math.PI)
       c.castShadow = true
       c.receiveShadow = true
     }
   })
+
+  loading.value = false
 
   window.ondblclick = async () => {
     const item = await viewer.IFC.selector.pickIfcItem(true)
@@ -149,6 +162,10 @@ const setTime = (event: { value: number }) => {
 <template>
 
   <div class="wrapper">
+    <div class="loader">
+
+    </div>
+
     <div ref="container" class="container"></div>
 
     <div class="slider">
@@ -170,8 +187,8 @@ const setTime = (event: { value: number }) => {
       <div class="controls">
         <button @click="goTo">Go to place</button>
         <button @click="toggleShadow">Toggle shadow {{ shadowEnabled ? 'off' : 'on' }}</button>
-
       </div>
+
       <div>{{ uv }} W/m²</div>
     </nav>
   </div>
