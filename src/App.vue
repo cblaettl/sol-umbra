@@ -1,11 +1,20 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { IfcViewerAPI } from "web-ifc-viewer";
-import { Color } from "three";
+import { BoxGeometry, Color, Mesh, MeshPhongMaterial, PCFSoftShadowMap, Vector2, Vector3 } from "three";
 
 const container = ref<HTMLDivElement | null>(null);
 
 let viewer: IfcViewerAPI
+
+const createBox = (width: number, height: number, depth: number, color = 0xffffff) => {
+	var geometry = new BoxGeometry( width, height, depth );
+	var material = new MeshPhongMaterial( { color: color } );
+	var cube = new Mesh(geometry, material);
+	cube.castShadow = true;
+	cube.receiveShadow = true;
+	return cube;
+}
 
 onMounted(() => {
   if (!container.value) {
