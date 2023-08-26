@@ -1,17 +1,34 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 import { IfcViewerAPI } from "web-ifc-viewer";
-import { Color } from "three";
+import RoundSlider from "vue-three-round-slider";
+import { BoxGeometry, Color, Mesh, MeshPhongMaterial, PCFSoftShadowMap, Vector2, Vector3 } from "three";
+import { getUV } from "./services/weather";
 import POIAutocomplete from "./component/POIAutocomplete.vue";
 
 const container = ref<HTMLDivElement | null>(null);
 
+
 let viewer: IfcViewerAPI
 
-onMounted(() => {
+const createBox = (width: number, height: number, depth: number, color = 0xffffff) => {
+	var geometry = new BoxGeometry( width, height, depth );
+	var material = new MeshPhongMaterial( { color: color } );
+	var cube = new Mesh(geometry, material);
+	cube.castShadow = true;
+	cube.receiveShadow = true;
+	return cube;
+}
+
+const uv = ref(0)
+
+
+onMounted(async () => {
   if (!container.value) {
     return
   }
+
+  uv.value = await getUV()
 
   viewer = new IfcViewerAPI({
     container: container.value,
@@ -83,17 +100,43 @@ const changed = (changed: Event) => {
 
     viewer.IFC.loadIfcUrl(ifcURL);
   }
+const goTo = () => {
+  // Cube in the middle
+  const cube = createBox( 5.0, 5.0, 5.0, 0xff0000 );
+  cube.position.set( 0.0, 5.0, 0.0 );
+  viewer.context.scene.add( cube );
+
+  viewer.context.ifcCamera.cameraControls.setLookAt(50, 50, 50, 0, 5, 0, true)
+}
+
+const format = (event: any) => {
+  var minutes = +event.value;
+  var hours = Math.floor(minutes / 60);
+  minutes = minutes % 60;
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+}
 
 const onPOISelected = (coordinates) => {
   // todo move camera to position
   console.log("coordiantes:");
   console.table(coordinates);
 }
-
 </script>
 
 <template>
+  <round-slider
+    min="360"
+    max="1260"
+    end-angle="180"
+    line-cap="round"
+    radius="100"
+    rangeColor="#FFDF22"
+    handleShape="dot"
+    :tooltipFormat="format"
+  />
   <input @change="changed" type="file" />
   <POIAutocomplete @selectPoi="onPOISelected" />
+  <button @click="goTo">Go to place</button>
+  <div>{{ uv }} W/m²</div>
   <div ref="container" style="width: 100%; height: 90vh;"></div>
 </template>
