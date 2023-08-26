@@ -55,21 +55,6 @@ onMounted(async () => {
 
   viewer.context.renderer.renderer.shadowMap.enabled = true;
 
-  // const ground = createBox( 50.0, 1.0, 50.0, 0x99ff99 );
-  // ground.position.set( 0.0, 0.0, 0.0 );
-  // viewer.context.scene.add( ground );
-  // // Cube in the middle
-  // const cube = createBox( 5.0, 5.0, 5.0 );
-  // cube.position.set( 0.0, 5.0, 0.0 );
-  // viewer.context.scene.add( cube );
-  // // North pole indicator
-  // const northIndicator = createBox( 2.0, 2.0, 8.0, 0xff0000 );
-  // northIndicator.position.set( 0.0, 1.0, 20.0 );
-  // viewer.context.scene.add( northIndicator );
-
-  // Add an ambient light
-  // viewer.context.scene.add(new AmbientLight( 0x333333));
-
   window.ondblclick = async () => {
     const item = await viewer.IFC.selector.pickIfcItem(true)
 
@@ -151,7 +136,7 @@ const goTo = () => {
   viewer.context.ifcCamera.cameraControls.setLookAt(50, 50, 50, 0, 5, 0, true)
 }
 
-const format = (event: any) => {
+const format = (event: { value: number }) => {
   var minutes = +event.value;
   var hours = Math.floor(minutes / 60);
   minutes = minutes % 60;
@@ -162,6 +147,20 @@ const onPOISelected = (coordinates: any) => {
   // todo move camera to position
   console.log("coordiantes:");
   console.table(coordinates);
+}
+
+const setTime = (event: { value: number }) => {
+  let minutes = +event.value;
+  const hours = Math.floor(minutes / 60);
+  minutes = minutes % 60;
+
+  date.setMinutes(minutes)
+  date.setHours(hours)
+
+  console.log({ minutes, hours })
+
+	sun.updateOrientation(date);
+	sun.updateDirectionalLight();
 }
 </script>
 
@@ -175,6 +174,7 @@ const onPOISelected = (coordinates: any) => {
     rangeColor="#FFDF22"
     handleShape="dot"
     :tooltipFormat="format"
+    :change="setTime"
   />
   <input @change="changed" type="file" />
   <POIAutocomplete @selectPoi="onPOISelected" />
