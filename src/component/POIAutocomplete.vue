@@ -75,20 +75,21 @@ const onSelect = (result) => {
   box-shadow: none;
   display: inline-block;
   padding: 0.5em 1em;
-}
-
-.simple-typeahead:hover input[type=text],
-.simple-typeahead:active input[type=text],
-.simple-typeahead:focus input[type=text] {
-  border-color: #FFD523;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.75);
 }
 
 .simple-typeahead input[type=text]:hover,
 .simple-typeahead input[type=text]:focus,
-.simple-typeahead input[type=text]:focus-visible, .simple-typeahead input[type=text]:active {
+.simple-typeahead input[type=text]:focus-visible,
+.simple-typeahead input[type=text]:active {
   box-shadow: none;
   outline: none;
 }
 
+.simple-typeahead input[type=text]:active,
+.simple-typeahead input[type=text]:focus-visible,
+.simple-typeahead input[type=text]:focus {
+  border-color: #FFD523;
+}
 
 </style>

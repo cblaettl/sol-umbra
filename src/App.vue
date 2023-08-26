@@ -224,7 +224,7 @@ const getUvMessage = function() {
     <nav>
       <POIAutocomplete @selectPoi="onPOISelected" />
       <div class="controls">
-        <button class="nav-btn" @click="toggleShadow">Toggle shadow {{ shadowEnabled ? 'off' : 'on' }}</button>
+        <button :class="{  'nav-btn nav-btn--primary' : shadowEnabled, 'nav-btn' : !shadowEnabled }" @click="toggleShadow">Toggle shadow {{ shadowEnabled ? 'off' : 'on' }}</button>
       </div>
 
       <div class="rad">{{getUvMessage()}}</div>
@@ -274,12 +274,13 @@ nav {
 
 .nav-btn {
   cursor: pointer;
-  background: #B2B1B9;
-  border: 1px solid #B2B1B9;
-  border-radius: 0;
+  background: #d9d7e6;
+  border: 1px solid #d9d7e6;
+  border-radius: 2px;
   padding: 10px;
   font-size: medium;
   transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.75);
 }
 
 .nav-btn--primary {
