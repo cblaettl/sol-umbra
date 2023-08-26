@@ -2,6 +2,7 @@
 import { onMounted, ref } from "vue";
 import { IfcViewerAPI } from "web-ifc-viewer";
 import { Color } from "three";
+import POIAutocomplete from "./component/POIAutocomplete.vue";
 
 const container = ref<HTMLDivElement | null>(null);
 
@@ -83,9 +84,16 @@ const changed = (changed: Event) => {
     viewer.IFC.loadIfcUrl(ifcURL);
   }
 
+const onPOISelected = (coordinates) => {
+  // todo move camera to position
+  console.log("coordiantes:");
+  console.table(coordinates);
+}
+
 </script>
 
 <template>
   <input @change="changed" type="file" />
+  <POIAutocomplete @selectPoi="onPOISelected" />
   <div ref="container" style="width: 100%; height: 90vh;"></div>
 </template>
