@@ -314,7 +314,7 @@ nav {
   height: 2em;
   cursor: pointer;
   border-radius: 2em;
-  transition: background-color 0.15s ease-in-out;
+  transition: background-color 0.25s ease-in-out;
 }
 
 .toggleswitch::before {
@@ -330,9 +330,11 @@ nav {
 }
 
 .toggleswitch--active {
-  background-color: #FFD523;
+  background-color: #e7be0b;
+  transition: background-color 0.25s ease-in-out;
 }
 .toggleswitch--active::before {
+  background-color: white;
   left: calc(100% - (2em - 6px) - 3px);
 }
 
