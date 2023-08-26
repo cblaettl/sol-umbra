@@ -241,10 +241,12 @@ const getUvMessage = function() {
 }
 
 nav {
-  padding: 1rem;
+  padding: 2rem;
 
   position: absolute;
   top: 0;
+  left: 0;
+  max-width: 500px;
   background: rgb(44, 46, 67);
   box-shadow: rgba(89, 82, 96, 0.4) 0px 7px 29px 0px;
   width: 100%;
