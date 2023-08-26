@@ -15,6 +15,7 @@ const container = ref<HTMLDivElement | null>(null);
 let viewer: IfcViewerAPI
 
 const loading = ref(true)
+const progress = ref(0)
 
 // const boundingBox = new Box3();
 const sun = new SunLight(
@@ -53,7 +54,9 @@ onMounted(async () => {
   viewer.context.renderer.renderer.shadowMap.type = PCFSoftShadowMap;
   viewer.context.renderer.renderer.toneMapping = ReinhardToneMapping;
 
-  await viewer.IFC.loadIfcUrl(IFC_MODEL_URL);
+  await viewer.IFC.loadIfcUrl(IFC_MODEL_URL, true, (e: ProgressEvent) => {
+    progress.value = e.loaded / e.total
+  });
 
   viewer.context.scene.scene.children.forEach(c => {
     if (c.type === "Mesh") {
@@ -71,11 +74,7 @@ onMounted(async () => {
       return
     }
 
-    await viewer.context.scene.scene.getObjectById(item.id)
-
     const result = await viewer.IFC.getProperties(item.modelID, item.id, false, true);
-
-    console.log({item, result})
 
     const coords = result["ObjectPlacement"]["RelativePlacement"]["Location"]["Coordinates"]
 
@@ -174,11 +173,13 @@ const setDate = (event: any) => {
 <template>
 
   <div class="wrapper">
-    <div class="loader">
-
-    </div>
-
     <div ref="container" class="container"></div>
+
+    <div v-if="loading" class="loader">
+      <div>
+        {{ Math.round(progress * 100) }}% Loading...
+      </div>
+    </div>
 
     <div class="slider">
       <round-slider
@@ -270,4 +271,19 @@ nav {
 .simple-typeahead:hover, .simple-typeahead:active {
   border: 1px solid #FFD523;
 }
+.loader {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(100, 100, 111, 0.5);
+  color: rgb(196, 238, 255);
+  font-size: 22px;
+  text-transform: uppercase;
+  font-weight: bolder;
+  text-align: center;
+}
+
 </style>
