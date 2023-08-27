@@ -218,7 +218,7 @@ const getUvMessage = function() {
         :change="setTime"
       />
 
-      <input class="inputdate" type="date"
+      <input class="inputdate" type="date" :value="date.getFullYear() + '-' + ('0' + (date.getMonth()+1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)"
         @change="setDate"/>
     </div>
 
