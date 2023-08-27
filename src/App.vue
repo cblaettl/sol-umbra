@@ -208,6 +208,7 @@ const getUvMessage = function() {
       <round-slider
         min="360"
         max="1260"
+        :model-value="date.getHours() * 60 + date.getMinutes()"
         end-angle="180"
         line-cap="round"
         radius="100"
