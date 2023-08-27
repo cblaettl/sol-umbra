@@ -7,3 +7,7 @@
 ## Installation
 1. Install dependencies: `npm install`
 2. Run: `npm run dev`
+
+## Credits
+
+https://github.com/antarktikali/threejs-sunlight/blob/master/SunLight.js
