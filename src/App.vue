@@ -218,7 +218,7 @@ const getUvMessage = function() {
         :change="setTime"
       />
 
-      <input type="date"
+      <input class="inputdate" type="date"
         @change="setDate"/>
     </div>
 
@@ -262,7 +262,11 @@ nav {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 2em;
 }
+.slider .rs-control {
+  margin-bottom: -50px;
+} 
 
 .container {
   height: 100%;
@@ -329,12 +333,11 @@ nav {
   height: calc(2em - 6px);
   border-radius: 50%;
   background-color: rgb(44, 46, 67);
-  transition: left 0.15s ease-in-out;
+  transition: left 0.35s ease-in-out, background-color 0.25s ease-in-out;
 }
 
 .toggleswitch--active {
   background-color: #e7be0b;
-  transition: background-color 0.25s ease-in-out;
 }
 .toggleswitch--active::before {
   background-color: white;
@@ -345,6 +348,15 @@ nav {
   margin: 15px 0 5px;
   color: white;
   display: block;
+}
+
+.inputdate {
+  padding: 0.5em 1em;
+  font-family: inherit;
+  background-color: white;
+  border: 2px solid rgb(44, 46, 67);
+  width: 200px;
+  max-width: 100%;
 }
 
 </style>
