@@ -223,7 +223,9 @@ const getUvMessage = function() {
     </div>
 
     <nav>
-      <POIAutocomplete @selectPoi="onPOISelected" />
+      <div class="search">
+        <POIAutocomplete @selectPoi="onPOISelected" />
+      </div>
       <div class="controls">
         <label class="navlabel">Toggle shadow</label>
         <button :class="{  'toggleswitch toggleswitch--active' : shadowEnabled, 'toggleswitch' : !shadowEnabled }" @click="toggleShadow"></button>
@@ -242,16 +244,20 @@ const getUvMessage = function() {
 }
 
 nav {
-  padding: 2rem;
+  padding: 1.75rem 2rem;
 
   position: absolute;
   top: 0;
-  left: 0;
-  max-width: 500px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 600px;
   background: rgb(44, 46, 67);
   box-shadow: rgba(89, 82, 96, 0.4) 0px 7px 29px 0px;
   width: 100%;
   box-sizing: border-box;
+
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .slider {
@@ -345,9 +351,14 @@ nav {
 }
 
 .navlabel {
-  margin: 15px 0 5px;
+  margin: 0 0 5px;
   color: white;
   display: block;
+}
+
+.search {
+  padding-right: 2em;
+  flex-grow: 1;
 }
 
 .inputdate {
@@ -357,6 +368,7 @@ nav {
   border: 2px solid rgb(44, 46, 67);
   width: 200px;
   max-width: 100%;
+  box-shadow: 0 0 10px 0 rgba(0,0,0,0.25);
 }
 
 </style>
